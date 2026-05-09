@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บัตรสมาชิกพรรคไก่ทอด</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;900&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #FF3300;
+  --red-dark: #CC2200;
+  --red-pale: rgba(255,51,0,0.07);
+  --card-w: 390px;
+  --card-h: 230px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: #f2f2f2;
+  min-height: 100vh;
+  color: #111;
+}
+
+.site-header {
+  background: #fff;
+  border-bottom: 4px solid var(--red);
+  padding: 26px 24px 20px;
+  text-align: center;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.site-title {
+  font-family: 'Kanit', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: #111;
+  line-height: 1;
+}
+
+.site-title .red { color: var(--red); }
+.site-subtitle { font-size: 12px; color: #aaa; letter-spacing: 1.5px; }
+
+.controls {
+  background: #fff;
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #e8e8e8;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-wrap { position: relative; flex: 1; max-width: 380px; }
+
+.search-wrap input {
+  width: 100%;
+  padding: 9px 14px 9px 38px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  color: #111;
+  outline: none;
+  background: #fafafa;
+  transition: border-color 0.15s;
+}
+
+.search-wrap input:focus { border-color: var(--red); background: #fff; }
+.search-wrap input::placeholder { color: #bbb; }
+.search-ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; }
+
+.btn-reload {
+  padding: 9px 18px;
+  background: var(--red);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.btn-reload:hover { background: var(--red-dark); }
+
+.count-pill {
+  padding: 6px 14px;
+  background: var(--red-pale);
+  border: 1px solid rgba(255,51,0,0.18);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.count-pill strong { font-weight: 700; }
+
+.filter-bar {
+  background: #fff;
+  padding: 9px 28px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.filter-btn {
+  padding: 4px 13px;
+  background: transparent;
+  border: 1.5px solid #ddd;
+  border-radius: 20px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  color: #777;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { border-color: var(--red); color: var(--red); }
+.filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  gap: 24px;
+  padding: 28px 36px 60px;
+  max-width: 1440px;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.member-card {
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1.5px solid #e8e8e8;
+  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s;
+  animation: cardIn 0.35s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+.member-card:hover {
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.1), 0 0 0 2px var(--red);
+}
+
+.card-topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--red);
+}
+
+.card-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    -55deg, transparent, transparent 20px,
+    rgba(255,51,0,0.02) 20px, rgba(255,51,0,0.02) 21px
+  );
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  padding: 18px 18px 10px 18px;
+  padding-top: 20px;
+  height: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.card-photo {
+  flex-shrink: 0;
+  width: 90px;
+  height: 108px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #eee;
+  background: #f5f5f5;
+}
+
+.card-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.photo-init {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Kanit', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--red);
+  background: var(--red-pale);
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2px;
+}
+
+.card-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 5px;
+}
+
+.card-name {
+  font-family: 'Kanit', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.card-position {
+  font-size: 13px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+.card-rule { width: 34px; height: 2px; background: var(--red); border-radius: 2px; margin-bottom: 8px; }
+
+.card-id-label { font-size: 9px; letter-spacing: 2px; color: #ccc; text-transform: uppercase; margin-bottom: 2px; }
+
+.card-id-num {
+  font-family: 'Kanit', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--red);
+  line-height: 1;
+}
+
+.card-id-num .hash { font-size: 12px; font-weight: 400; color: #ccc; margin-right: 1px; }
+
+.card-footer {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 30px;
+  background: #fafafa;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.card-footer-text { font-size: 9px; letter-spacing: 1.5px; color: #ccc; text-transform: uppercase; }
+.card-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+.state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; }
+.state-emoji { font-size: 44px; margin-bottom: 14px; }
+.state-title { font-family: 'Kanit', sans-serif; font-size: 20px; color: #555; margin-bottom: 6px; }
+.state-sub { font-size: 14px; color: #aaa; }
+
+.spinner {
+  width: 34px; height: 34px;
+  border: 3px solid rgba(255,51,0,0.12);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin: 0 auto 14px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.toast {
+  position: fixed;
+  bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
+  background: #111;
+  border-left: 3px solid var(--red);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #fff;
+  transition: transform 0.3s cubic-bezier(0.34,1.4,0.64,1);
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 500px) {
+  :root { --card-w: 320px; --card-h: 215px; }
+  .cards-grid { padding: 16px 14px 48px; gap: 16px; }
+  .controls, .filter-bar { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <span style="font-size:28px">🍗</span>
+    <h1 class="site-title">พรรค<span class="red">ไก่ทอด</span></h1>
+  </div>
+  <p class="site-subtitle">MEMBER REGISTRY · ระบบตรวจสอบบัตรสมาชิก</p>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input type="text" id="searchInput" placeholder="ค้นหาชื่อ ตำแหน่ง หรือเลขบัตร..." oninput="filterCards()">
+  </div>
+  <button class="btn-reload" onclick="loadMembers()">🔄 โหลดใหม่</button>
+  <div class="count-pill" id="memberCount">สมาชิก: <strong>—</strong></div>
+</div>
+
+<div class="filter-bar" id="filterBar"></div>
+<div class="cards-grid" id="cardsGrid">
+  <div class="state-box"><div class="spinner"></div><div class="state-title">กำลังโหลดข้อมูล...</div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  วาง URL ของ Google Apps Script Web App ตรงนี้เลย
+// ============================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKOQfJqsbg9R6nlSM3BkwyNCjqLYOUonmbr01wxxfwbmigZqXlow5yzo8GkZ_uix9nxw/exec';
+// ============================================================
+
+let allMembers = [];
+let activeFilter = 'all';
+
+async function loadMembers() {
+  if (!SCRIPT_URL || SCRIPT_URL.includes('ใส่URL')) {
+    showState('⚙️','ยังไม่ได้ตั้งค่า URL','เปิดไฟล์ HTML แล้วแก้ SCRIPT_URL ในโค้ด');
+    return;
+  }
+  showLoading();
+  try {
+    const res = await fetch(SCRIPT_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    allMembers = json.members || [];
+    buildFilterBar();
+    renderCards(allMembers);
+    showToast('✅ โหลดสำเร็จ ' + allMembers.length + ' คน');
+  } catch(err) {
+    showState('⚠️','โหลดไม่สำเร็จ', err.message + '<br>ตรวจสอบ SCRIPT_URL และการ Deploy');
+    showToast('❌ โหลดไม่สำเร็จ');
+  }
+}
+
+function showLoading() {
+  document.getElementById('cardsGrid').innerHTML =
+    '<div class="state-box"><div class="spinner"></div><div class="state-title">กำลังโหลดข้อมูล...</div></div>';
+}
+
+function showState(emoji, title, sub) {
+  document.getElementById('cardsGrid').innerHTML =
+    `<div class="state-box"><div class="state-emoji">${emoji}</div><div class="state-title">${title}</div><div class="state-sub">${sub}</div></div>`;
+}
+
+function buildFilterBar() {
+  const positions = ['all', ...new Set(allMembers.map(m => m.position).filter(Boolean))];
+  document.getElementById('filterBar').innerHTML = positions.map(p =>
+    `<button class="filter-btn ${p===activeFilter?'active':''}" onclick="setFilter('${esc(p)}')">${p==='all'?'🍗 ทั้งหมด':esc(p)}</button>`
+  ).join('');
+}
+
+function setFilter(pos) { activeFilter = pos; buildFilterBar(); filterCards(); }
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  let list = allMembers;
+  if (activeFilter !== 'all') list = list.filter(m => m.position === activeFilter);
+  if (q) list = list.filter(m =>
+    m.name.toLowerCase().includes(q) ||
+    (m.position||'').toLowerCase().includes(q) ||
+    String(m.id).includes(q)
+  );
+  renderCards(list);
+}
+
+function renderCards(members) {
+  document.getElementById('memberCount').innerHTML = 'สมาชิก: <strong>' + members.length + '</strong>';
+  if (!members.length) { showState('🔍','ไม่พบสมาชิก','ลองค้นหาด้วยคำอื่น'); return; }
+
+  document.getElementById('cardsGrid').innerHTML = members.map((m, i) => {
+    const idStr = String(m.id).padStart(3,'0');
+    const init = getInitials(m.name);
+    const photo = m.photo
+      ? `<img src="${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'photo-init\\'>${init}</div>'">`
+      : `<div class="photo-init">${init}</div>`;
+    return `
+    <div class="member-card" style="animation-delay:${Math.min(i*0.05,0.5)}s">
+      <div class="card-topbar"></div>
+      <div class="card-pattern"></div>
+      <div class="card-content">
+        <div class="card-photo">${photo}</div>
+        <div class="card-info">
+          <div class="card-tag">🍗 พรรคไก่ทอด</div>
+          <div class="card-name">${esc(m.name)}</div>
+          <div class="card-position">${esc(m.position||'—')}</div>
+          <div class="card-rule"></div>
+          <div class="card-id-label">Member No.</div>
+          <div class="card-id-num"><span class="hash">#</span>${idStr}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-footer-text">Fried Chicken Party · Thailand</span>
+        <div class="card-dot"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getInitials(name) {
+  if (!name) return '?';
+  const p = name.trim().split(' ');
+  return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let _tt;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+loadMembers();
+</script>
+</body>
+</html>
