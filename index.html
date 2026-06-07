@@ -3,471 +3,881 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>บัตรสมาชิกพรรคไก่ทอด</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;900&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Phonics Quest — แกะรหัสเสียง</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --red: #FF3300;
-  --red-dark: #CC2200;
-  --red-pale: rgba(255,51,0,0.07);
-  --card-w: 390px;
-  --card-h: 230px;
-}
+  :root {
+    --primary: #5B4FCF;
+    --primary-light: #EAE8FD;
+    --primary-dark: #3B2FA0;
+    --accent: #F5A623;
+    --accent-light: #FEF3DC;
+    --success: #2ECC71;
+    --success-light: #D5F5E3;
+    --danger: #E74C3C;
+    --danger-light: #FDEDEC;
+    --surface: #FFFFFF;
+    --surface-2: #F8F7FF;
+    --text-main: #1A1333;
+    --text-muted: #7B6FA8;
+    --border: #E2DFFA;
+    --slot-empty: #F0EEFF;
+    --slot-border: #C5BEFA;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(91,79,207,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', 'Mitr', sans-serif;
+    background: linear-gradient(135deg, #F0EEFF 0%, #FEF8F0 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 12px 40px;
+    color: var(--text-main);
+  }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 20px; }
+  .logo { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--primary); opacity: 0.7; margin-bottom: 2px; }
+  .title { font-size: 26px; font-weight: 900; color: var(--primary-dark); line-height: 1.1; }
 
-body {
-  font-family: 'Sarabun', sans-serif;
-  background: #f2f2f2;
-  min-height: 100vh;
-  color: #111;
-}
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 28px 28px 24px;
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    z-index: 0;
+  }
 
-.site-header {
-  background: #fff;
-  border-bottom: 4px solid var(--red);
-  padding: 26px 24px 20px;
-  text-align: center;
-}
+  /* ══════════════════════════════
+     LOBBY SCREEN
+  ══════════════════════════════ */
+  #lobby-screen { position: relative; z-index: 1; }
+  .lobby-hero {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .lobby-emoji { font-size: 52px; margin-bottom: 8px; display: block; }
+  .lobby-title { font-size: 22px; font-weight: 900; color: var(--primary-dark); margin-bottom: 4px; }
+  .lobby-sub { font-size: 13px; color: var(--text-muted); }
 
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 4px;
-}
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
 
-.site-title {
-  font-family: 'Kanit', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  color: #111;
-  line-height: 1;
-}
+  /* option grid */
+  .option-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .opt-btn {
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .opt-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+  .opt-btn.selected {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(91,79,207,0.15);
+  }
+  .opt-icon { font-size: 20px; }
+  .opt-title { font-size: 13px; font-weight: 800; color: var(--primary-dark); }
+  .opt-sub { font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
 
-.site-title .red { color: var(--red); }
-.site-subtitle { font-size: 12px; color: #aaa; letter-spacing: 1.5px; }
+  /* order option */
+  .order-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 24px;
+  }
 
-.controls {
-  background: #fff;
-  padding: 12px 28px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #e8e8e8;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+  /* start button */
+  .start-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 99px;
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 6px 20px rgba(91,79,207,0.3);
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .start-btn:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,79,207,0.35); }
+  .start-btn:active { transform: scale(0.98); }
 
-.search-wrap { position: relative; flex: 1; max-width: 380px; }
+  /* ══════════════════════════════
+     PROGRESS BAR
+  ══════════════════════════════ */
+  #progress-wrap { width: 100%; max-width: 480px; margin-bottom: 18px; display: none; }
+  .progress-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .progress-label { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+  .progress-count { font-size: 13px; font-weight: 800; color: var(--primary); }
+  .progress-bar-bg { background: var(--border); border-radius: 99px; height: 8px; overflow: hidden; }
+  .progress-bar-fill { background: linear-gradient(90deg, var(--primary), #8B7FE8); height: 100%; border-radius: 99px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
 
-.search-wrap input {
-  width: 100%;
-  padding: 9px 14px 9px 38px;
-  border: 1.5px solid #ddd;
-  border-radius: 8px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  color: #111;
-  outline: none;
-  background: #fafafa;
-  transition: border-color 0.15s;
-}
+  /* ══════════════════════════════
+     GAME SCREEN
+  ══════════════════════════════ */
+  #game-screen { display: none; }
 
-.search-wrap input:focus { border-color: var(--red); background: #fff; }
-.search-wrap input::placeholder { color: #bbb; }
-.search-ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; }
+  /* mode badge */
+  .mode-badge {
+    position: absolute;
+    top: 16px; left: 20px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--primary);
+    opacity: 0.6;
+    z-index: 2;
+  }
 
-.btn-reload {
-  padding: 9px 18px;
-  background: var(--red);
-  border: none;
-  border-radius: 8px;
-  color: #fff;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex; align-items: center; gap: 5px;
-  transition: background 0.15s;
-  white-space: nowrap;
-}
+  .word-section { position: relative; z-index: 1; text-align: center; margin-bottom: 20px; }
+  .word-eng { font-size: 38px; font-weight: 900; letter-spacing: 4px; color: var(--primary-dark); line-height: 1; margin-bottom: 6px; }
+  .word-meaning { display: inline-block; background: var(--accent-light); color: #A0620A; font-size: 15px; font-weight: 700; padding: 4px 16px; border-radius: 99px; }
 
-.btn-reload:hover { background: var(--red-dark); }
+  .phonics-hint { background: var(--surface-2); border: 1.5px dashed var(--slot-border); border-radius: var(--radius-sm); padding: 8px 14px; text-align: center; font-size: 12.5px; color: var(--text-muted); margin-bottom: 20px; position: relative; z-index: 1; }
 
-.count-pill {
-  padding: 6px 14px;
-  background: var(--red-pale);
-  border: 1px solid rgba(255,51,0,0.18);
-  border-radius: 20px;
-  font-size: 13px;
-  color: var(--red);
-  white-space: nowrap;
-}
+  .slots-section { display: flex; gap: 10px; justify-content: center; margin-bottom: 22px; position: relative; z-index: 1; flex-wrap: wrap; }
+  .slot-group { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .slot-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); }
+  .slot {
+    width: 72px; height: 72px;
+    border-radius: 14px;
+    border: 2.5px dashed var(--slot-border);
+    background: var(--slot-empty);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800;
+    color: var(--primary-dark);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    position: relative;
+    user-select: none;
+  }
+  .slot.filled { border-style: solid; border-color: var(--primary); background: var(--primary-light); animation: pop-in 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+  .slot.correct { border-color: var(--success); background: var(--success-light); color: #1A7A3D; }
+  .slot.wrong { border-color: var(--danger); background: var(--danger-light); color: var(--danger); animation: shake 0.35s ease; }
+  .slot.drag-over { border-color: var(--accent); background: var(--accent-light); transform: scale(1.06); }
+  .slot .remove-btn { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; border-radius: 50%; background: var(--danger); color: #fff; font-size: 11px; line-height: 18px; text-align: center; cursor: pointer; font-weight: 900; display: none; }
+  .slot.filled:hover .remove-btn { display: block; }
 
-.count-pill strong { font-weight: 700; }
+  .choices-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); text-align: center; margin-bottom: 10px; position: relative; z-index: 1; }
+  .choices-grid { display: flex; flex-wrap: wrap; gap: 9px; justify-content: center; position: relative; z-index: 1; min-height: 52px; }
+  .choice-btn {
+    background: var(--surface-2);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 22px; font-weight: 800;
+    font-family: 'Mitr', sans-serif;
+    color: var(--primary-dark);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .choice-btn:hover:not(.used) { background: var(--primary-light); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(91,79,207,0.15); }
+  .choice-btn:active:not(.used) { transform: translateY(0) scale(0.95); }
+  .choice-btn.used { opacity: 0.25; pointer-events: none; filter: grayscale(1); }
+  .choice-btn.dragging { opacity: 0.4; transform: scale(0.95); }
 
-.filter-bar {
-  background: #fff;
-  padding: 9px 28px;
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid #ebebeb;
-}
+  .actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; position: relative; z-index: 1; flex-wrap: wrap; }
+  .btn { padding: 11px 24px; border-radius: 99px; font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; border: none; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; gap: 6px; }
+  .btn:active { transform: scale(0.96); }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px rgba(91,79,207,0.3); }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-ghost { background: var(--surface-2); color: var(--text-muted); border: 1.5px solid var(--border); }
+  .btn-ghost:hover { background: var(--border); color: var(--text-main); }
+  .btn-success { background: var(--success); color: #fff; box-shadow: 0 4px 14px rgba(46,204,113,0.3); }
+  .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 4px 14px rgba(245,166,35,0.3); }
 
-.filter-btn {
-  padding: 4px 13px;
-  background: transparent;
-  border: 1.5px solid #ddd;
-  border-radius: 20px;
-  font-family: 'Sarabun', sans-serif;
-  font-size: 13px;
-  color: #777;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+  .result-panel { margin-top: 18px; border-radius: var(--radius); padding: 16px 20px; text-align: center; display: none; position: relative; z-index: 1; animation: fade-in 0.3s ease; }
+  .result-panel.show { display: block; }
+  .result-panel.correct-panel { background: var(--success-light); border: 2px solid #96E6B3; }
+  .result-panel.wrong-panel { background: var(--danger-light); border: 2px solid #F5B7B1; }
+  .result-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .result-panel.correct-panel .result-title { color: #1A7A3D; }
+  .result-panel.wrong-panel .result-title { color: var(--danger); }
+  .result-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
-.filter-btn:hover { border-color: var(--red); color: var(--red); }
-.filter-btn.active { background: var(--red); border-color: var(--red); color: #fff; }
+  .phoneme-row { display: flex; gap: 6px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+  .phoneme-pill { background: var(--primary-light); border: 1.5px solid var(--primary); border-radius: 99px; padding: 4px 12px; font-size: 13px; font-weight: 700; color: var(--primary-dark); display: flex; align-items: center; gap: 4px; }
+  .phoneme-pill span.label { font-size: 10px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
-  gap: 24px;
-  padding: 28px 36px 60px;
-  max-width: 1440px;
-  margin: 0 auto;
-  justify-items: center;
-}
+  /* ══════════════════════════════
+     COMPLETE SCREEN
+  ══════════════════════════════ */
+  .complete-screen { display: none; text-align: center; padding: 10px 0; animation: fade-in 0.5s ease; }
+  .complete-screen.show { display: block; }
+  .complete-emoji { font-size: 64px; margin-bottom: 12px; }
+  .complete-title { font-size: 28px; font-weight: 900; color: var(--primary-dark); margin-bottom: 8px; }
+  .complete-sub { font-size: 15px; color: var(--text-muted); margin-bottom: 20px; }
+  .score-badge { display: inline-block; background: linear-gradient(135deg, var(--primary), #8B7FE8); color: #fff; font-size: 36px; font-weight: 900; padding: 16px 36px; border-radius: 16px; margin-bottom: 12px; letter-spacing: 1px; }
 
-.member-card {
-  width: var(--card-w);
-  height: var(--card-h);
-  border-radius: 14px;
-  position: relative;
-  overflow: hidden;
-  background: #fff;
-  border: 1.5px solid #e8e8e8;
-  transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), box-shadow 0.25s;
-  animation: cardIn 0.35s ease both;
-}
+  /* star rating */
+  .star-row { font-size: 32px; margin-bottom: 20px; letter-spacing: 4px; }
 
-@keyframes cardIn {
-  from { opacity: 0; transform: translateY(12px) scale(0.97); }
-  to   { opacity: 1; transform: none; }
-}
+  /* summary table */
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .summary-cell { background: var(--surface-2); border-radius: 10px; padding: 10px 6px; text-align: center; }
+  .summary-num { font-size: 20px; font-weight: 900; color: var(--primary-dark); }
+  .summary-lbl { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
-.member-card:hover {
-  transform: translateY(-5px) scale(1.015);
-  box-shadow: 0 14px 36px rgba(0,0,0,0.1), 0 0 0 2px var(--red);
-}
+  .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-.card-topbar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 5px;
-  background: var(--red);
-}
+  /* difficulty badge on word card */
+  .diff-badge {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-size: 10px; font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 99px;
+    z-index: 2;
+  }
+  .diff-easy { background: var(--success-light); color: #1A7A3D; }
+  .diff-medium { background: var(--accent-light); color: #A0620A; }
+  .diff-hard { background: var(--danger-light); color: var(--danger); }
 
-.card-pattern {
-  position: absolute; inset: 0;
-  background-image: repeating-linear-gradient(
-    -55deg, transparent, transparent 20px,
-    rgba(255,51,0,0.02) 20px, rgba(255,51,0,0.02) 21px
-  );
-  pointer-events: none;
-}
+  /* animations */
+  .speaking { animation: pulse 0.6s ease infinite alternate; }
+  @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.05); } }
+  @keyframes pop-in { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-.card-content {
-  position: relative;
-  padding: 18px 18px 10px 18px;
-  padding-top: 20px;
-  height: 100%;
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
+  .confetti-wrap { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; overflow: hidden; }
+  .confetti-dot { position: absolute; width: 10px; height: 10px; border-radius: 2px; animation: confetti-fall linear forwards; }
+  @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
-.card-photo {
-  flex-shrink: 0;
-  width: 90px;
-  height: 108px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 2px solid #eee;
-  background: #f5f5f5;
-}
-
-.card-photo img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-}
-
-.photo-init {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Kanit', sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--red);
-  background: var(--red-pale);
-}
-
-.card-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  padding-top: 2px;
-}
-
-.card-tag {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 5px;
-}
-
-.card-name {
-  font-family: 'Kanit', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: #111;
-  line-height: 1.1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 3px;
-}
-
-.card-position {
-  font-size: 13px;
-  color: #888;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 10px;
-}
-
-.card-rule { width: 34px; height: 2px; background: var(--red); border-radius: 2px; margin-bottom: 8px; }
-
-.card-id-label { font-size: 9px; letter-spacing: 2px; color: #ccc; text-transform: uppercase; margin-bottom: 2px; }
-
-.card-id-num {
-  font-family: 'Kanit', sans-serif;
-  font-size: 26px;
-  font-weight: 900;
-  color: var(--red);
-  line-height: 1;
-}
-
-.card-id-num .hash { font-size: 12px; font-weight: 400; color: #ccc; margin-right: 1px; }
-
-.card-footer {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 30px;
-  background: #fafafa;
-  border-top: 1px solid #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-}
-
-.card-footer-text { font-size: 9px; letter-spacing: 1.5px; color: #ccc; text-transform: uppercase; }
-.card-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
-
-.state-box { grid-column: 1/-1; text-align: center; padding: 80px 24px; }
-.state-emoji { font-size: 44px; margin-bottom: 14px; }
-.state-title { font-family: 'Kanit', sans-serif; font-size: 20px; color: #555; margin-bottom: 6px; }
-.state-sub { font-size: 14px; color: #aaa; }
-
-.spinner {
-  width: 34px; height: 34px;
-  border: 3px solid rgba(255,51,0,0.12);
-  border-top-color: var(--red);
-  border-radius: 50%;
-  animation: spin 0.75s linear infinite;
-  margin: 0 auto 14px;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.toast {
-  position: fixed;
-  bottom: 24px; left: 50%;
-  transform: translateX(-50%) translateY(70px);
-  background: #111;
-  border-left: 3px solid var(--red);
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  color: #fff;
-  transition: transform 0.3s cubic-bezier(0.34,1.4,0.64,1);
-  z-index: 999;
-  white-space: nowrap;
-}
-
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-@media (max-width: 500px) {
-  :root { --card-w: 320px; --card-h: 215px; }
-  .cards-grid { padding: 16px 14px 48px; gap: 16px; }
-  .controls, .filter-bar { padding-left: 14px; padding-right: 14px; }
-}
+  /* lobby slide-in */
+  .slide-up { animation: slide-up 0.4s cubic-bezier(0.22,1,0.36,1); }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="header-top">
-    <span style="font-size:28px">🍗</span>
-    <h1 class="site-title">พรรค<span class="red">ไก่ทอด</span></h1>
-  </div>
-  <p class="site-subtitle">MEMBER REGISTRY · ระบบตรวจสอบบัตรสมาชิก</p>
-</header>
+<div class="confetti-wrap" id="confetti-wrap"></div>
 
-<div class="controls">
-  <div class="search-wrap">
-    <span class="search-ico">🔍</span>
-    <input type="text" id="searchInput" placeholder="ค้นหาชื่อ ตำแหน่ง หรือเลขบัตร..." oninput="filterCards()">
-  </div>
-  <button class="btn-reload" onclick="loadMembers()">🔄 โหลดใหม่</button>
-  <div class="count-pill" id="memberCount">สมาชิก: <strong>—</strong></div>
+<div class="header">
+  <div class="logo">🔤 Phonics Quest</div>
+  <div class="title">แกะรหัสเสียง</div>
 </div>
 
-<div class="filter-bar" id="filterBar"></div>
-<div class="cards-grid" id="cardsGrid">
-  <div class="state-box"><div class="spinner"></div><div class="state-title">กำลังโหลดข้อมูล...</div></div>
+<!-- PROGRESS (shown during game) -->
+<div id="progress-wrap">
+  <div class="progress-info">
+    <span class="progress-label" id="progress-mode-label">ความคืบหน้า</span>
+    <span class="progress-count" id="progress-count">0 / 10</span>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+  </div>
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- CARD -->
+<div class="card" id="main-card">
+
+  <!-- ══ LOBBY SCREEN ══ -->
+  <div id="lobby-screen" class="slide-up">
+    <div class="lobby-hero">
+      <span class="lobby-emoji">🎮</span>
+      <div class="lobby-title">เลือกโหมดการเล่น</div>
+      <div class="lobby-sub">ปรับแต่งก่อนเริ่มผจญภัยกับเสียง Phonics!</div>
+    </div>
+
+    <!-- จำนวนข้อ -->
+    <div class="section-label">จำนวนข้อ</div>
+    <div class="option-grid" id="qty-grid">
+      <div class="opt-btn selected" data-group="qty" data-val="10" onclick="selectOpt(this,'qty')">
+        <span class="opt-icon">📋</span>
+        <span class="opt-title">10 ข้อ</span>
+        <span class="opt-sub">มาตรฐาน</span>
+      </div>
+      <div class="opt-btn" data-group="qty" data-val="20" onclick="selectOpt(this,'qty')">
+        <span class="opt-icon">📚</span>
+        <span class="opt-title">20 ข้อ</span>
+        <span class="opt-sub">เพิ่มความท้า</span>
+      </div>
+      <div class="opt-btn" data-group="qty" data-val="5" onclick="selectOpt(this,'qty')">
+        <span class="opt-icon">⚡</span>
+        <span class="opt-title">5 ข้อ</span>
+        <span class="opt-sub">ด่วน ๆ</span>
+      </div>
+    </div>
+
+    <!-- ลำดับ -->
+    <div class="section-label">ลำดับคำศัพท์</div>
+    <div class="order-grid" id="order-grid">
+      <div class="opt-btn selected" data-group="order" data-val="random" onclick="selectOpt(this,'order')">
+        <span class="opt-icon">🔀</span>
+        <span class="opt-title">สุ่ม</span>
+        <span class="opt-sub">ไม่ซ้ำเดิม</span>
+      </div>
+      <div class="opt-btn" data-group="order" data-val="easy-hard" onclick="selectOpt(this,'order')">
+        <span class="opt-icon">📈</span>
+        <span class="opt-title">ง่าย → ยาก</span>
+        <span class="opt-sub">ค่อย ๆ ยาก</span>
+      </div>
+      <div class="opt-btn" data-group="order" data-val="hard-easy" onclick="selectOpt(this,'order')">
+        <span class="opt-icon">📉</span>
+        <span class="opt-title">ยาก → ง่าย</span>
+        <span class="opt-sub">ท้าทายก่อน</span>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startGame()">
+      <span>🚀</span> เริ่มเล่น!
+    </button>
+  </div>
+
+  <!-- ══ GAME SCREEN ══ -->
+  <div id="game-screen">
+    <div class="mode-badge" id="mode-badge"></div>
+    <div class="diff-badge" id="diff-badge"></div>
+
+    <div class="word-section">
+      <div class="word-eng" id="word-eng">ROAD</div>
+      <div class="word-meaning" id="word-meaning">ถนน</div>
+    </div>
+
+    <div class="phonics-hint" id="phonics-hint"></div>
+    <div class="slots-section" id="slots-section"></div>
+
+    <div class="choices-label">เลือกเสียง</div>
+    <div class="choices-grid" id="choices-grid"></div>
+
+    <div class="result-panel" id="result-panel">
+      <div class="result-title" id="result-title"></div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="phoneme-row" id="phoneme-row"></div>
+    </div>
+
+    <div class="actions" id="actions">
+      <button class="btn btn-ghost" onclick="resetSlots()" id="btn-reset">↺ เริ่มใหม่</button>
+      <button class="btn btn-primary" onclick="checkAnswer()" id="btn-check">ตรวจคำตอบ →</button>
+      <button class="btn btn-success" onclick="speak()" id="btn-speak" style="display:none">🔊 ฟังเสียง</button>
+      <button class="btn btn-accent" onclick="nextWord()" id="btn-next" style="display:none">ข้อต่อไป →</button>
+    </div>
+
+    <div class="complete-screen" id="complete-screen">
+      <div class="complete-emoji">🏆</div>
+      <div class="complete-title">จบแล้ว!</div>
+      <div class="complete-sub" id="complete-sub"></div>
+      <div class="score-badge" id="final-score">10/10</div>
+      <div class="star-row" id="star-row">⭐⭐⭐</div>
+      <div class="summary-grid">
+        <div class="summary-cell"><div class="summary-num" id="sum-correct">0</div><div class="summary-lbl">ถูก</div></div>
+        <div class="summary-cell"><div class="summary-num" id="sum-wrong">0</div><div class="summary-lbl">ผิด</div></div>
+        <div class="summary-cell"><div class="summary-num" id="sum-pct">0%</div><div class="summary-lbl">คะแนน</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="backToLobby()">🏠 เมนูหลัก</button>
+        <button class="btn btn-primary" onclick="restartGame()">🔄 เล่นอีกครั้ง</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /card -->
 
 <script>
-// ============================================================
-//  วาง URL ของ Google Apps Script Web App ตรงนี้เลย
-// ============================================================
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKOQfJqsbg9R6nlSM3BkwyNCjqLYOUonmbr01wxxfwbmigZqXlow5yzo8GkZ_uix9nxw/exec';
-// ============================================================
+// ═══════════════════════════════════════════
+//  WORD DATABASE (ขยายคลังคำศัพท์เพื่อเกมที่ท้าทายขึ้น)
+// ═══════════════════════════════════════════
+const ALL_WORDS = [
+  // 🟢 ระดับง่าย (Difficulty 1): คำสั้น 3 ตัว ตรงตัว (CVC)
+  { word:"CAT", meaning:"แมว", thai:"แคท", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ค",eng:"C"},{slot:"สระ",sound:"แ—",eng:"A"},{slot:"ตัวสะกด",sound:"ท",eng:"T"}],
+    distractors:["ก","อา","น"] },
+  { word:"BIG", meaning:"ใหญ่", thai:"บิก", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"บ",eng:"B"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกด",sound:"ก",eng:"G"}],
+    distractors:["ม","อา","ช"] },
+  { word:"SUN", meaning:"ดวงอาทิตย์", thai:"ซัน", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ซ",eng:"S"},{slot:"สระ",sound:"อะ",eng:"U"},{slot:"ตัวสะกด",sound:"น",eng:"N"}],
+    distractors:["ก","อี","ด"] },
+  { word:"DOG", meaning:"สุนัข", thai:"ด็อก", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ด",eng:"D"},{slot:"สระ",sound:"ออ",eng:"O"},{slot:"ตัวสะกด",sound:"ก",eng:"G"}],
+    distractors:["ม","อิ","น"] },
+  { word:"RED", meaning:"สีแดง", thai:"เรด", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ร",eng:"R"},{slot:"สระ",sound:"เ—",eng:"E"},{slot:"ตัวสะกด",sound:"ด",eng:"D"}],
+    distractors:["ก","อี","บ"] },
+  { word:"HEN", meaning:"แม่ไก่", thai:"เฮน", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ฮ",eng:"H"},{slot:"สระ",sound:"เ—",eng:"E"},{slot:"ตัวสะกด",sound:"น",eng:"N"}],
+    distractors:["ก","อา","ด"] },
+  { word:"MUD", meaning:"โคลน", thai:"มัด", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ม",eng:"M"},{slot:"สระ",sound:"อะ",eng:"U"},{slot:"ตัวสะกด",sound:"ด",eng:"D"}],
+    distractors:["ก","อี","น"] },
+  { word:"MIX", meaning:"ผสม", thai:"มิกส์", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ม",eng:"M"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกด",sound:"กส",eng:"X"}],
+    distractors:["ค","แอะ","ด"] },
+  { word:"GLAD", meaning:"ดีใจ / ยินดี", thai:"แกลด", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"กล",eng:"GL"},{slot:"สระ",sound:"แอะ",eng:"A"},{slot:"ตัวสะกด",sound:"ด",eng:"D"}],
+    distractors:["ก","ล","เอะ"] },
+  { word:"PIG", meaning:"หมู", thai:"พิก", difficulty:1,
+    phonics:[{slot:"พยัญชนะต้น",sound:"พ",eng:"P"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกด",sound:"ก",eng:"G"}],
+    distractors:["บ","แอะ","ม"] },
 
-let allMembers = [];
-let activeFilter = 'all';
+  // 🟡 ระดับกลาง (Difficulty 2): สระคู่หูพื้นฐาน และพยัญชนะต้นควบกล้ำคู่
+  { word:"FISH", meaning:"ปลา", thai:"ฟิช", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ฟ",eng:"F"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกด",sound:"ช",eng:"SH"}],
+    distractors:["ก","อา","น"] },
+  { word:"SHIP", meaning:"เรือ", thai:"ชิพ", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ช",eng:"SH"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกด",sound:"พ",eng:"P"}],
+    distractors:["ก","โ—","ล"] },
+  { word:"RAIN", meaning:"ฝน", thai:"เรน", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ร",eng:"R"},{slot:"สระคู่หู",sound:"เ—",eng:"AI"},{slot:"ตัวสะกด",sound:"น",eng:"N"}],
+    distractors:["ก","ด","อา"] },
+  { word:"CAKE", meaning:"เค้ก", thai:"เคก", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ค",eng:"C"},{slot:"สระ",sound:"เ—",eng:"A_E"},{slot:"ตัวสะกด",sound:"ก",eng:"K"}],
+    distractors:["ม","อิ","ร"] },
+  { word:"ROAD", meaning:"ถนน", thai:"โรด", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ร",eng:"R"},{slot:"สระคู่หู",sound:"โ—",eng:"OA"},{slot:"ตัวสะกด",sound:"ด",eng:"D"}],
+    distractors:["ม","อิ","บ"] },
+  { word:"TREE", meaning:"ต้นไม้", thai:"ทรี", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ทร",eng:"TR"},{slot:"สระคู่หู",sound:"อี",eng:"EE"}],
+    distractors:["ก","ช","อา"] },
+  { word:"BLUE", meaning:"สีฟ้า", thai:"บลู", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"บล",eng:"BL"},{slot:"สระคู่หู",sound:"อู",eng:"UE"}],
+    distractors:["ก","ด","อา"] },
+  { word:"FROG", meaning:"กบ", thai:"ฟรอก", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ฟร",eng:"FR"},{slot:"สระ",sound:"ออ",eng:"O"},{slot:"ตัวสะกด",sound:"ก",eng:"G"}],
+    distractors:["ม","อิ","น"] },
+  { word:"SWEET", meaning:"หวาน", thai:"สวีท", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"สว",eng:"SW"},{slot:"สระคู่หู",sound:"อี",eng:"EE"},{slot:"ตัวสะกด",sound:"ท",eng:"T"}],
+    distractors:["ซ","ว","เอ"] },
+  { word:"BOAT", meaning:"เรือพาย / เรือเล็ก", thai:"โบท", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"บ",eng:"B"},{slot:"สระคู่หู",sound:"โ—",eng:"OA"},{slot:"ตัวสะกด",sound:"ท",eng:"T"}],
+    distractors:["พ","อิ","ม"] },
+  { word:"MEAT", meaning:"เนื้อสัตว์", thai:"มีท", difficulty:2,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ม",eng:"M"},{slot:"สระคู่หู",sound:"อี",eng:"EA"},{slot:"ตัวสะกด",sound:"ท",eng:"T"}],
+    distractors:["ร","แอะ","ด"] },
 
-async function loadMembers() {
-  if (!SCRIPT_URL || SCRIPT_URL.includes('ใส่URL')) {
-    showState('⚙️','ยังไม่ได้ตั้งค่า URL','เปิดไฟล์ HTML แล้วแก้ SCRIPT_URL ในโค้ด');
-    return;
+  // 🔴 ระดับยาก (Difficulty 3): สระคู่หูซับซ้อน ตัวสะกดควบท้าย และคำสองพยางค์
+  { word:"CLOUD", meaning:"เมฆ", thai:"คลาวด์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"คล",eng:"CL"},{slot:"สระคู่หู",sound:"เ—า",eng:"OU"},{slot:"ตัวสะกด",sound:"ด",eng:"D"}],
+    distractors:["ก","อิ","น"] },
+  { word:"NIGHT", meaning:"กลางคืน", thai:"ไนต์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"น",eng:"N"},{slot:"สระคู่หู",sound:"ไ—",eng:"IGH"},{slot:"ตัวสะกด",sound:"ต",eng:"T"}],
+    distractors:["ก","อา","ม"] },
+  { word:"PHONE", meaning:"โทรศัพท์", thai:"โฟน", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ฟ",eng:"PH"},{slot:"สระ",sound:"โ—",eng:"O"},{slot:"ตัวสะกด",sound:"น",eng:"NE"}],
+    distractors:["ก","อิ","ด"] },
+  { word:"KNIGHT", meaning:"อัศวิน", thai:"ไนต์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"น",eng:"KN"},{slot:"สระคู่หู",sound:"ไ—",eng:"IGH"},{slot:"ตัวสะกด",sound:"ต",eng:"T"}],
+    distractors:["ก","อา","บ"] },
+  { word:"THROUGH", meaning:"ผ่าน", thai:"ทรู", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ทร",eng:"THR"},{slot:"สระคู่หู",sound:"อู",eng:"OUGH"}],
+    distractors:["ก","ด","ม"] },
+  { word:"COAST", meaning:"ชายฝั่ง", thai:"โคสท์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"ค",eng:"C"},{slot:"สระคู่หู",sound:"โ—",eng:"OA"},{slot:"ตัวสะกดควบท้าย",sound:"สท์",eng:"ST"}],
+    distractors:["ช","ออ","ส"] },
+  { word:"BLEND", meaning:"ผสมผสาน", thai:"เบลนด์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"บล",eng:"BL"},{slot:"สระ",sound:"เ—ะ",eng:"E"},{slot:"ตัวสะกดควบท้าย",sound:"นด์",eng:"ND"}],
+    distractors:["แอะ","น","บ"] },
+  { word:"SPRINT", meaning:"วิ่งเต็มสปีด", thai:"สปรินท์", difficulty:3,
+    phonics:[{slot:"พยัญชนะต้น",sound:"สปร",eng:"SPR"},{slot:"สระ",sound:"อิ",eng:"I"},{slot:"ตัวสะกดควบท้าย",sound:"นท์",eng:"NT"}],
+    distractors:["สพ","ร","อี"] },
+  { word:"SPLENDID", meaning:"ยอดเยี่ยมมาก", thai:"สเปลนดิด", difficulty:3,
+    phonics:[{slot:"พยางค์ที่ 1",sound:"สเปลนด",eng:"SPLEND"},{slot:"พยางค์ที่ 2",sound:"ดิด",eng:"DID"}],
+    distractors:["สเพลน","ทิต","เดด"] },
+  { word:"COMPLAIN", meaning:"บ่น / ร้องเรียน", thai:"คอมเพลน", difficulty:3,
+    phonics:[{slot:"พยางค์ที่ 1",sound:"คอม",eng:"COM"},{slot:"พยางค์ที่ 2",sound:"เพลน",eng:"PLAIN"}],
+    distractors:["ควม","เฟลน","แพลน"] }
+];
+
+// ═══════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════
+let gameWords = [];        // array of word objects for this session
+let selectedQty = 10;
+let selectedOrder = 'random';
+let currentIdx = 0;
+let score = 0;
+let answers = [];
+let answered = false;
+let lastRestartSettings = null;
+
+function selectOpt(el, group) {
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  if (group === 'qty') selectedQty = parseInt(el.dataset.val);
+  if (group === 'order') selectedOrder = el.dataset.val;
+}
+
+function buildWordList() {
+  let pool = [...ALL_WORDS];
+  if (selectedOrder === 'random') {
+    pool = shuffle(pool);
+  } else if (selectedOrder === 'easy-hard') {
+    pool.sort((a,b) => a.difficulty - b.difficulty);
+  } else if (selectedOrder === 'hard-easy') {
+    pool.sort((a,b) => b.difficulty - a.difficulty);
   }
-  showLoading();
-  try {
-    const res = await fetch(SCRIPT_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    allMembers = json.members || [];
-    buildFilterBar();
-    renderCards(allMembers);
-    showToast('✅ โหลดสำเร็จ ' + allMembers.length + ' คน');
-  } catch(err) {
-    showState('⚠️','โหลดไม่สำเร็จ', err.message + '<br>ตรวจสอบ SCRIPT_URL และการ Deploy');
-    showToast('❌ โหลดไม่สำเร็จ');
+  // If 20 requested but we only have 20, repeat with shuffle of rest
+  const need = selectedQty;
+  let result = [];
+  while (result.length < need) {
+    result = result.concat(pool);
+  }
+  return result.slice(0, need);
+}
+
+function startGame() {
+  lastRestartSettings = { qty: selectedQty, order: selectedOrder };
+  gameWords = buildWordList();
+  currentIdx = 0;
+  score = 0;
+
+  document.getElementById('lobby-screen').style.display = 'none';
+  document.getElementById('game-screen').style.display = 'block';
+  document.getElementById('progress-wrap').style.display = 'block';
+
+  // Mode badge
+  const orderLabels = { random:'🔀 สุ่ม', 'easy-hard':'📈 ง่าย→ยาก', 'hard-easy':'📉 ยาก→ง่าย' };
+  document.getElementById('mode-badge').textContent = orderLabels[selectedOrder];
+
+  renderWord();
+}
+
+function getCurrentWord() { return gameWords[currentIdx]; }
+
+function getDiffBadge(d) {
+  if (d === 1) return { cls: 'diff-easy', label: '⭐ ง่าย' };
+  if (d === 2) return { cls: 'diff-medium', label: '⭐⭐ กลาง' };
+  return { cls: 'diff-hard', label: '⭐⭐⭐ ยาก' };
+}
+
+function renderWord() {
+  const w = getCurrentWord();
+  answered = false;
+  answers = new Array(w.phonics.length).fill(null);
+
+  document.getElementById('word-eng').textContent = w.word;
+  document.getElementById('word-meaning').textContent = w.meaning;
+  document.getElementById('phonics-hint').textContent =
+    `หน่วยเสียง ${w.phonics.length} ส่วน — ลากหรือคลิกเสียงไปใส่ช่องให้ถูกต้อง`;
+
+  // Difficulty badge
+  const db = getDiffBadge(w.difficulty);
+  const badge = document.getElementById('diff-badge');
+  badge.className = 'diff-badge ' + db.cls;
+  badge.textContent = db.label;
+
+  // Progress
+  const total = gameWords.length;
+  document.getElementById('progress-count').textContent = `${currentIdx} / ${total}`;
+  document.getElementById('progress-bar').style.width = `${(currentIdx / total) * 100}%`;
+
+  renderSlots();
+  renderChoices();
+  hideResult();
+
+  document.getElementById('btn-check').style.display = '';
+  document.getElementById('btn-reset').style.display = '';
+  document.getElementById('btn-speak').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('complete-screen').classList.remove('show');
+  document.getElementById('actions').style.display = '';
+}
+
+function renderSlots() {
+  const w = getCurrentWord();
+  const section = document.getElementById('slots-section');
+  section.innerHTML = '';
+  w.phonics.forEach((p, i) => {
+    const group = document.createElement('div');
+    group.className = 'slot-group';
+    const label = document.createElement('div');
+    label.className = 'slot-label';
+    label.textContent = p.slot;
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (answers[i] ? ' filled' : '');
+    slot.dataset.index = i;
+    slot.setAttribute('aria-label', `ช่องที่ ${i+1}`);
+
+    const txt = document.createElement('span');
+    txt.textContent = answers[i] || '';
+    slot.appendChild(txt);
+
+    const removeBtn = document.createElement('span');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '×';
+    removeBtn.onclick = (e) => { e.stopPropagation(); clearSlot(i); };
+    slot.appendChild(removeBtn);
+
+    slot.onclick = () => clickSlot(i);
+    slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', (e) => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      const sound = e.dataTransfer.getData('sound');
+      if (sound && answers[i] === null) {
+        answers[i] = sound;
+        renderSlots();
+        renderChoices();
+      }
+    });
+
+    group.appendChild(label);
+    group.appendChild(slot);
+    section.appendChild(group);
+  });
+}
+
+function renderChoices() {
+  const w = getCurrentWord();
+  const grid = document.getElementById('choices-grid');
+  grid.innerHTML = '';
+  const allSounds = [...w.phonics.map(p => p.sound), ...w.distractors];
+  const shuffled = shuffle(allSounds);
+  shuffled.forEach((sound) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = sound;
+    if (answers.includes(sound)) btn.classList.add('used');
+    btn.onclick = () => clickChoice(btn, sound);
+    btn.setAttribute('draggable', 'true');
+    btn.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('sound', sound);
+      btn.classList.add('dragging');
+    });
+    btn.addEventListener('dragend', () => btn.classList.remove('dragging'));
+    grid.appendChild(btn);
+  });
+}
+
+function clickChoice(btn, sound) {
+  if (btn.classList.contains('used')) return;
+  const emptyIdx = answers.indexOf(null);
+  if (emptyIdx !== -1) {
+    answers[emptyIdx] = sound;
+    renderSlots();
+    renderChoices();
   }
 }
 
-function showLoading() {
-  document.getElementById('cardsGrid').innerHTML =
-    '<div class="state-box"><div class="spinner"></div><div class="state-title">กำลังโหลดข้อมูล...</div></div>';
+function clickSlot(idx) {
+  if (answers[idx]) clearSlot(idx);
 }
 
-function showState(emoji, title, sub) {
-  document.getElementById('cardsGrid').innerHTML =
-    `<div class="state-box"><div class="state-emoji">${emoji}</div><div class="state-title">${title}</div><div class="state-sub">${sub}</div></div>`;
+function clearSlot(idx) {
+  answers[idx] = null;
+  renderSlots();
+  renderChoices();
 }
 
-function buildFilterBar() {
-  const positions = ['all', ...new Set(allMembers.map(m => m.position).filter(Boolean))];
-  document.getElementById('filterBar').innerHTML = positions.map(p =>
-    `<button class="filter-btn ${p===activeFilter?'active':''}" onclick="setFilter('${esc(p)}')">${p==='all'?'🍗 ทั้งหมด':esc(p)}</button>`
-  ).join('');
+function checkAnswer() {
+  const w = getCurrentWord();
+  if (answers.includes(null)) { shakeCard(); return; }
+  answered = true;
+  const correct = w.phonics.map(p => p.sound);
+  const isCorrect = answers.every((a, i) => a === correct[i]);
+  const slots = document.querySelectorAll('.slot');
+  slots.forEach((slot, i) => {
+    slot.classList.add(answers[i] === correct[i] ? 'correct' : 'wrong');
+  });
+  showResult(isCorrect);
+  if (isCorrect) { score++; spawnConfetti(); }
+  document.getElementById('btn-check').style.display = 'none';
+  document.getElementById('btn-reset').style.display = 'none';
+  document.getElementById('btn-speak').style.display = '';
+  document.getElementById('btn-next').style.display = '';
 }
 
-function setFilter(pos) { activeFilter = pos; buildFilterBar(); filterCards(); }
-
-function filterCards() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  let list = allMembers;
-  if (activeFilter !== 'all') list = list.filter(m => m.position === activeFilter);
-  if (q) list = list.filter(m =>
-    m.name.toLowerCase().includes(q) ||
-    (m.position||'').toLowerCase().includes(q) ||
-    String(m.id).includes(q)
-  );
-  renderCards(list);
+function showResult(isCorrect) {
+  const panel = document.getElementById('result-panel');
+  const w = getCurrentWord();
+  panel.className = 'result-panel show ' + (isCorrect ? 'correct-panel' : 'wrong-panel');
+  document.getElementById('result-title').textContent = isCorrect ? '🎉 ถูกต้อง! ยอดเยี่ยม!' : '❌ ยังไม่ถูกนะ!';
+  document.getElementById('result-desc').textContent = isCorrect
+    ? `"${w.word}" อ่านว่า "${w.thai}" · ${w.phonics.length} หน่วยเสียง`
+    : `เฉลย: ${w.phonics.map(p => p.sound).join(' + ')} = "${w.thai}"`;
+  const row = document.getElementById('phoneme-row');
+  row.innerHTML = '';
+  w.phonics.forEach(p => {
+    const pill = document.createElement('div');
+    pill.className = 'phoneme-pill';
+    pill.innerHTML = `<span class="label">${p.eng}</span> ${p.sound}`;
+    row.appendChild(pill);
+  });
 }
 
-function renderCards(members) {
-  document.getElementById('memberCount').innerHTML = 'สมาชิก: <strong>' + members.length + '</strong>';
-  if (!members.length) { showState('🔍','ไม่พบสมาชิก','ลองค้นหาด้วยคำอื่น'); return; }
-
-  document.getElementById('cardsGrid').innerHTML = members.map((m, i) => {
-    const idStr = String(m.id).padStart(3,'0');
-    const init = getInitials(m.name);
-    const photo = m.photo
-      ? `<img src="${esc(m.photo)}" alt="${esc(m.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'photo-init\\'>${init}</div>'">`
-      : `<div class="photo-init">${init}</div>`;
-    return `
-    <div class="member-card" style="animation-delay:${Math.min(i*0.05,0.5)}s">
-      <div class="card-topbar"></div>
-      <div class="card-pattern"></div>
-      <div class="card-content">
-        <div class="card-photo">${photo}</div>
-        <div class="card-info">
-          <div class="card-tag">🍗 พรรคไก่ทอด</div>
-          <div class="card-name">${esc(m.name)}</div>
-          <div class="card-position">${esc(m.position||'—')}</div>
-          <div class="card-rule"></div>
-          <div class="card-id-label">Member No.</div>
-          <div class="card-id-num"><span class="hash">#</span>${idStr}</div>
-        </div>
-      </div>
-      <div class="card-footer">
-        <span class="card-footer-text">Fried Chicken Party · Thailand</span>
-        <div class="card-dot"></div>
-      </div>
-    </div>`;
-  }).join('');
+function hideResult() {
+  document.getElementById('result-panel').className = 'result-panel';
+  document.getElementById('phoneme-row').innerHTML = '';
 }
 
-function getInitials(name) {
-  if (!name) return '?';
-  const p = name.trim().split(' ');
-  return p.length >= 2 ? (p[0][0]+p[1][0]).toUpperCase() : name.slice(0,2).toUpperCase();
+function resetSlots() {
+  answers = new Array(getCurrentWord().phonics.length).fill(null);
+  renderSlots();
+  renderChoices();
+  hideResult();
 }
 
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function nextWord() {
+  currentIdx++;
+  if (currentIdx >= gameWords.length) {
+    showComplete();
+  } else {
+    renderWord();
+  }
 }
 
-let _tt;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(_tt);
-  _tt = setTimeout(() => t.classList.remove('show'), 2800);
+function showComplete() {
+  const total = gameWords.length;
+  document.getElementById('progress-count').textContent = `${total} / ${total}`;
+  document.getElementById('progress-bar').style.width = '100%';
+
+  const wrong = total - score;
+  const pct = Math.round((score / total) * 100);
+
+  document.getElementById('final-score').textContent = `${score} / ${total}`;
+  document.getElementById('sum-correct').textContent = score;
+  document.getElementById('sum-wrong').textContent = wrong;
+  document.getElementById('sum-pct').textContent = pct + '%';
+
+  const orderLabels = { random:'แบบสุ่ม', 'easy-hard':'จากง่ายไปยาก', 'hard-easy':'จากยากไปง่าย' };
+  document.getElementById('complete-sub').textContent =
+    `${total} ข้อ · ${orderLabels[selectedOrder]}`;
+
+  let stars = pct >= 90 ? '⭐⭐⭐' : pct >= 60 ? '⭐⭐' : '⭐';
+  document.getElementById('star-row').textContent = stars;
+
+  // hide gameplay elements
+  ['word-eng','word-meaning','phonics-hint','slots-section','choices-grid','result-panel','actions']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = 'none'; });
+  document.querySelector('.choices-label').style.display = 'none';
+  document.getElementById('diff-badge').style.display = 'none';
+
+  document.getElementById('complete-screen').classList.add('show');
+  spawnConfetti(80);
 }
 
-loadMembers();
+function restartGame() {
+  // Restore hidden elements
+  ['word-eng','word-meaning','phonics-hint','slots-section','choices-grid','result-panel','actions']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
+  document.querySelector('.choices-label').style.display = '';
+  document.getElementById('diff-badge').style.display = '';
+
+  gameWords = buildWordList();
+  currentIdx = 0;
+  score = 0;
+  renderWord();
+}
+
+function backToLobby() {
+  document.getElementById('game-screen').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('lobby-screen').style.display = 'block';
+  document.getElementById('lobby-screen').classList.add('slide-up');
+
+  // Restore hidden elements for next game
+  ['word-eng','word-meaning','phonics-hint','slots-section','choices-grid','result-panel','actions']
+    .forEach(id => { const el = document.getElementById(id); if(el) el.style.display = ''; });
+  const cl = document.querySelector('.choices-label');
+  if (cl) cl.style.display = '';
+  const db = document.getElementById('diff-badge');
+  if (db) db.style.display = '';
+  document.getElementById('complete-screen').classList.remove('show');
+}
+
+function speak() {
+  const w = getCurrentWord();
+  if ('speechSynthesis' in window) {
+    const utter = new SpeechSynthesisUtterance(w.word);
+    utter.lang = 'en-US'; utter.rate = 0.85;
+    const btn = document.getElementById('btn-speak');
+    btn.classList.add('speaking');
+    utter.onend = () => btn.classList.remove('speaking');
+    speechSynthesis.speak(utter);
+  }
+}
+
+function shakeCard() {
+  const card = document.getElementById('main-card');
+  card.style.animation = 'none';
+  requestAnimationFrame(() => { card.style.animation = 'shake 0.35s ease'; });
+  setTimeout(() => card.style.animation = '', 400);
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function spawnConfetti(count = 40) {
+  const wrap = document.getElementById('confetti-wrap');
+  const colors = ['#5B4FCF','#F5A623','#2ECC71','#E74C3C','#3498DB','#9B59B6'];
+  for (let i = 0; i < count; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'confetti-dot';
+    dot.style.left = Math.random() * 100 + '%';
+    dot.style.top = '-10px';
+    dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+    dot.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    dot.style.animationDelay = (Math.random() * 0.8) + 's';
+    dot.style.width = dot.style.height = (7 + Math.random() * 8) + 'px';
+    dot.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    wrap.appendChild(dot);
+    setTimeout(() => dot.remove(), 4000);
+  }
+}
 </script>
 </body>
 </html>
